@@ -63,3 +63,18 @@ body{
 	background: red;
   }
   
+.thanks{
+	height: 500px;
+	width: 800px;
+	margin:100px 300px;
+	box-shadow: 5px 5px 10px #645aec;
+	border-radius: 50px;
+	color: #fff;
+	background: green;
+}
+.thanks h1{
+	padding-top: 100px;
+}
+.thanks h2{
+	font-size: 100px;
+}

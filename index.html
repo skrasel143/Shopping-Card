@@ -73,10 +73,16 @@
                   </div>
                </div>
                <div class="col-md-12 pt-4 pb-4">
-                  <button type="button" class="btn btn-success check-out">Check Out</button>
+                  <button id="checkout" type="button" class="btn btn-success check-out">Check Out</button>
                </div>
             </div>
          </div>
+      </div>
+      <div class="thanks">
+         <h1 class="text-center">Thank you for Shopping with us</h1>
+         <h2 class="text-center">🤝</h2>
+         <h3 class="text-center">Have a Nice Day!</h3>
+         
       </div>
    </section>
 
@@ -237,6 +243,19 @@
          newGrand = newGrand.toFixed(2);
          document.querySelector('#grand-total').innerText = newGrand;
       } 
+
+      // Checkout area
+      const checkoutBtn = document.querySelector('#checkout');
+      
+      checkoutBtn.addEventListener('click', addNewItem);
+
+      function addNewItem(){
+         const container = document.querySelector('.container');
+         const thanks = document.querySelector('.thanks');
+         container.style.display = 'none';
+         thanks.style.display = 'block';
+      }
+
    </script>
 
 </body>
