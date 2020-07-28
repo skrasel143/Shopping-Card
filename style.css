@@ -53,8 +53,7 @@ body{
 	background-color: #2FBE70;
 	border: none;
 }
-.warning{
-
+.alert{
 	font-size: 15px;
 	text-align: center;
 	margin: 0px 100px 10px 500px;
@@ -71,6 +70,7 @@ body{
 	border-radius: 50px;
 	color: #fff;
 	background: green;
+	display: none;
 }
 .thanks h1{
 	padding-top: 100px;
