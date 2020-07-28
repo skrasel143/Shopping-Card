@@ -16,7 +16,7 @@
    <section>
       <div class="container">
          <div class="cart">
-            <div class="alert"></div>
+            <div id="warning"></div>
             <div class="col-md-12 col-lg-10 mx-auto">
                <div class="cart-item">
                   <div class="row">
@@ -27,11 +27,11 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="minus" class="btn minus btn-default"><i class="fas fa-minus"></i></button>
-                           <input id="quantity" type="text" class="form-control text-center" value="1">
-                           <button id="plus" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button onclick="handleProduct('phone', false)" class="btn minus btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="phone-quantity" type="text" class="form-control text-center" value="1">
+                           <button onclick="handleProduct('phone', true)" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$<span id="phone-price">1219</span></h5>
+                        <h5 id="phone-price">$1219</h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -45,12 +45,12 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="minus2" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input id="quantity2" type="text" class="form-control amount text-center" value="1">
-                           <button id="plus2" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button onclick="handleProduct('case', false)" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="case-quantity" type="text" class="form-control amount text-center" value="1">
+                           <button onclick="handleProduct('case', true)" class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$<span id="case-price">59</span></h5>
+                        <h5 id="case-price">$59</h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -66,19 +66,19 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$<span id="sub-total">1278</span></h5>
-                        <h5>$ <span id="tax">12.78</span></h5>
-                        <h5>$<span id="grand-total">1290.78</span></h5>
+                        <h5 id="sub-total">$1278</h5>
+                        <h5 id="tax">$24</h5>
+                        <h5 id="grand-total">$1290</h5>
                      </div>
                   </div>
                </div>
                <div class="col-md-12 pt-4 pb-4">
-                  <button id="checkout" type="button" class="btn btn-success check-out">Check Out</button>
+                  <button id="checkOut" type="button" class="btn btn-success check-out">Check Out</button>
                </div>
             </div>
          </div>
       </div>
-      <div class="thanks">
+      <div id="greet" class="thanks">
          <h1 class="text-center">Thank you for Shopping with us</h1>
          <h2 class="text-center">🤝</h2>
          <h3 class="text-center">Have a Nice Day!</h3>
@@ -86,175 +86,57 @@
       </div>
    </section>
 
-   <script>
+   <script> 
 
-      const minusBtn = document.querySelector('#minus');
-      const plusBtn = document.querySelector('#plus');
-      const warning = document.querySelector('.alert');
-
-      minusBtn.addEventListener('click', reduceValue);
-      plusBtn.addEventListener('click', increaseValue);
-
-      // phone price increase area.
-      function increaseValue(){
-      const increaseQuantity = document.querySelector('#quantity').value;
-      const parseQuantity = parseFloat(increaseQuantity);
-      const newQuantity = parseQuantity + 1;
-      document.querySelector('#quantity').value = newQuantity;
-
-      const phonePrice = document.querySelector('#phone-price').innerText;
-      const parsePrice = parseFloat(phonePrice);
-      const newPrice = parsePrice + 1219;
-      document.querySelector('#phone-price').innerText = newPrice;
-      const subTotal = document.querySelector('#sub-total').innerHTML;
-      const parseSub = parseFloat(subTotal);
-      const newSub = parseSub + 1219;
-      document.querySelector('#sub-total').innerText = newSub;
-
-      const addTax = document.querySelector('#tax').innerText;
-      const parseTax = parseFloat(addTax);
-      const newTax = newSub / 100;
-      document.querySelector('#tax').innerText = newTax;
-
-      const grandTotal = document.querySelector('#grand-total').innerText;
-      const parseGrand = parseFloat(grandTotal);
-      const newGrand = newSub + newTax;
-      document.querySelector('#grand-total').innerText = newGrand;
+      function handleProduct(product, isIncrease){
+         const productQuantity = getInputValue(product);
+         let phoneNewCount = productQuantity;
+         if(isIncrease == true){
+            productNewCount = productQuantity + 1;
+         } else if (isIncrease == false && productQuantity > 1){
+            productNewCount = productQuantity - 1;
+         } else {
+         let alert = document.querySelector('#warning');
+         alert.innerText = "Can't select less than 1 Produck !";
+         alert.classList.add('alert');
+         setTimeout(() => alert.remove(), 2000);
+         }
+         document.getElementById(product + '-quantity').value = productNewCount;
+         let productTotal = 0;
+         if(product == 'phone'){
+            productTotal = productNewCount * 1219;            
+         } else if(product == 'case'){
+            productTotal = productNewCount * 59;
+         }
+         document.getElementById(product + '-price').innerText = '$' + productTotal;
+         calculateTotal();
       }
 
-      // phone price decrease area.
-      function reduceValue(){
-         const reduceQuantity = document.querySelector('#quantity').value;
-         const parseQuantity = parseFloat(reduceQuantity);
-         const newQuantity = parseQuantity - 1;
-         if(newQuantity < 1){
-            parseQuantity;
-            warning.innerHTML = 'You are selecting nothing!'
-            warning.classList.add('warning');
-            setTimeout(() => warning.remove(), 2000);
-         } else {
-            document.querySelector('#quantity').value = newQuantity;
-         }
-         const phonePrice = document.querySelector('#phone-price').innerText;
-         const parsePrice = parseFloat(phonePrice);
-         const newPrice = parsePrice  - 1219;
-         const addedPrice = parsePrice - newPrice;
-         if(newPrice < 1){
-            parsePrice = 0;
-         } else {
-            document.querySelector('#phone-price').innerText = newPrice; 
-         }
-         const subTotal = document.querySelector('#sub-total').innerText;
-         const parseSub = parseFloat(subTotal);
-         const newSub = parseSub - 1219;
-         document.querySelector('#sub-total').innerText = newSub;
+      function calculateTotal(){
+         const phoneCount = getInputValue('phone');
+         const caseCount = getInputValue('case');
+         const subTotal = phoneCount * 1219 + caseCount * 59;
+         document.getElementById('sub-total').innerText = '$' + subTotal;
 
-         const addTax = document.querySelector('#tax').innerText;
-         const parseTax = parseFloat(addTax);
-         const newTax = newSub / 100;
-         const addedTax = parseTax - newTax;
-         document.querySelector('#tax').innerText = newTax;
+         const tax = Math.round(subTotal * 0.02);
+         document.getElementById('tax').innerText = '$' + tax;
 
-         const grandTotal = document.querySelector('#grand-total').innerText;
-         const parseGrand = parseFloat(grandTotal);
-         const subTax = addedPrice + addedTax;
-         let newGrand = parseGrand - subTax;
-         newGrand = newGrand.toFixed(2);
-         document.querySelector('#grand-total').innerText = newGrand;
-       }
-
-      // Case price increase area.
-      const plusBtn2 = document.querySelector('#plus2');
-
-      plusBtn2.addEventListener('click', increaseValue2);
-      
-      function increaseValue2(){
-         const increaseQuantity = document.querySelector('#quantity2').value;
-         const parseQuantity = parseFloat(increaseQuantity);
-         const newQuantity = parseQuantity + 1;
-         document.querySelector('#quantity2').value = newQuantity;
-
-         const casePrice = document.querySelector('#case-price').innerText;
-         const parseCase = parseFloat(casePrice);
-         const newCasePrice = parseCase + 59;
-         const updatedPrice = newCasePrice - parseCase;
-         document.querySelector('#case-price').innerText = newCasePrice;
-
-         const subTotal = document.querySelector('#sub-total').innerHTML;
-         const parseSub = parseFloat(subTotal);
-         const newSub = parseSub + updatedPrice;
-         document.querySelector('#sub-total').innerText = newSub;
-
-         const addTax = document.querySelector('#tax').innerText;
-         const parseTax = parseFloat(addTax);
-         const newTax = newSub / 100;
-         document.querySelector('#tax').innerText = newTax;
-
-         const grandTotal = document.querySelector('#grand-total').innerText;
-         const parseGrand = parseFloat(grandTotal);
-         const newGrand = newSub + newTax;
-         document.querySelector('#grand-total').innerText = newGrand;
+         const grandTotal = subTotal + tax;
+         document.getElementById('grand-total').innerText = '$' + grandTotal;
+         
+      }
+      function getInputValue(product){
+         const productInput = document.getElementById(product + '-quantity');
+         const productCount = parseInt(productInput.value);
+         return productCount;
       }
 
-   // Case price decrease area
-      const minusBtn2 = document.querySelector('#minus2');
-
-      minusBtn2.addEventListener('click', reduceValue2);
-
-      function reduceValue2(){
-         const reduceQuantity = document.querySelector('#quantity2').value;
-         const parseQuantity = parseFloat(reduceQuantity);
-         const newQuantity = parseQuantity - 1;
-         if(newQuantity < 1){
-            parseQuantity = 0;
-            warning.innerHTML = 'You are selecting nothing!'
-            warning.classList.add('warning');
-            setTimeout(() => warning.remove(), 2000);
-         } else {
-            document.querySelector('#quantity2').value = newQuantity;
-         }
-
-         const casePrice = document.querySelector('#case-price').innerText;
-         const parsePrice = parseFloat(casePrice);
-         const newPrice = parsePrice  - 59;
-         const addedPrice = parsePrice - newPrice;
-         if(newPrice < 1){
-            parsePrice;
-         } else {
-            document.querySelector('#case-price').innerText = newPrice; 
-         }
-
-         const subTotal = document.querySelector('#sub-total').innerText;
-         const parseSub = parseFloat(subTotal);
-         const newSub = parseSub - addedPrice;
-         const addedSub = parseSub - newSub;
-         document.querySelector('#sub-total').innerText = newSub;
-
-         const addTax = document.querySelector('#tax').innerText;
-         const parseTax = parseFloat(addTax);
-         const newTax = newSub / 100;
-         const addedTax = newTax - parseTax;
-         document.querySelector('#tax').innerText = newTax;
-
-         const grandTotal = document.querySelector('#grand-total').innerText;
-         const parseGrand = parseFloat(grandTotal);
-         const subTax = addedSub + addedTax;
-         let newGrand = parseGrand - subTax;
-         newGrand = newGrand.toFixed(2);
-         document.querySelector('#grand-total').innerText = newGrand;
-      } 
-
-      // Checkout area
-      const checkoutBtn = document.querySelector('#checkout');
-      
-      checkoutBtn.addEventListener('click', addNewItem);
-
-      function addNewItem(){
-         const container = document.querySelector('.container');
-         const thanks = document.querySelector('.thanks');
-         container.style.display = 'none';
-         thanks.style.display = 'block';
-      }
+      document.getElementById('checkOut').addEventListener('click', function(){
+         let mainPage = document.querySelector('.container');
+         mainPage.style.display = 'none'
+         let greetPage = document.getElementById('greet');
+         greetPage.style.display = 'block';
+      })
 
    </script>
 
